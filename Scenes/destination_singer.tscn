@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://ctu6rlvvpaiv4"]
+
+[ext_resource type="Script" uid="uid://dmgum4ocrxfbg" path="res://Scripts/destination_singer.gd" id="1_6gvgf"]
+[ext_resource type="Texture2D" uid="uid://bo13nehj0co3g" path="res://kenney_pico-8-platformer/Transparent/Tilemap/tilemap_packed.png" id="2_tc2af"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mky80"]
+size = Vector2(16, 16)
+
+[node name="Destination" type="Area2D"]
+collision_mask = 3
+script = ExtResource("1_6gvgf")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(181, 105)
+texture = ExtResource("2_tc2af")
+region_enabled = true
+region_rect = Rect2(88, 48, 16, 16)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(181, 105)
+shape = SubResource("RectangleShape2D_mky80")
