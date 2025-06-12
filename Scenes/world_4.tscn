@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://0jdbk5af8x6d"]
+
+[ext_resource type="PackedScene" uid="uid://rt1ok1v2gnht" path="res://Scenes/world.tscn" id="1_y7xs7"]
+[ext_resource type="PackedScene" uid="uid://cp7lil7vn3yyw" path="res://Scenes/player_2.tscn" id="2_5p1ph"]
+
+[node name="World4" instance=ExtResource("1_y7xs7")]
+
+[node name="Player" parent="." index="1"]
+position = Vector2(-108, 179)
+
+[node name="Camera2D" parent="Player" index="3"]
+zoom = Vector2(0.7, 0.7)
+
+[node name="Player2" parent="." index="6" instance=ExtResource("2_5p1ph")]
+position = Vector2(-131, 181)
+collision_mask = 7

@@ -1,0 +1,90 @@
+[gd_scene load_steps=3 format=3 uid="uid://b088f4to4exxa"]
+
+[ext_resource type="Texture2D" uid="uid://35b1drilsqxm" path="res://kenney_new-platformer-pack-1.0/Sprites/Backgrounds/Default/background_color_trees.png" id="1_k2f4n"]
+[ext_resource type="Script" uid="uid://ct1cixl7yt7ut" path="res://Scripts/choose_level.gd" id="1_mbyrd"]
+
+[node name="ChooseLevel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mbyrd")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(64, 87)
+texture = ExtResource("1_k2f4n")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(320, 87)
+texture = ExtResource("1_k2f4n")
+
+[node name="V" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -50.5
+offset_right = 156.0
+offset_bottom = 50.5
+grow_vertical = 2
+
+[node name="L1" type="Button" parent="V"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "single-player level1"
+
+[node name="L2" type="Button" parent="V"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "single-player level2"
+
+[node name="L3" type="Button" parent="V"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "single-player level3"
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "BACK
+"
+
+[node name="V2" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="L4" type="Button" parent="V2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "two player level1"
+
+[node name="L5" type="Button" parent="V2"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "two player level2"
+
+[node name="L6" type="Button" parent="V2"]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "two player level3"
+
+[connection signal="pressed" from="V/L1" to="." method="_on_l_1_pressed"]
+[connection signal="pressed" from="V/L2" to="." method="_on_l_2_pressed"]
+[connection signal="pressed" from="V/L3" to="." method="_on_l_3_pressed"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="V2/L4" to="." method="_on_l_4_pressed"]
+[connection signal="pressed" from="V2/L5" to="." method="_on_l_5_pressed"]
+[connection signal="pressed" from="V2/L6" to="." method="_on_l_6_pressed"]

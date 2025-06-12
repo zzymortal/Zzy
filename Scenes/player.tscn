@@ -1,0 +1,196 @@
+[gd_scene load_steps=12 format=3 uid="uid://f4sqhcp6c1jc"]
+
+[ext_resource type="Texture2D" uid="uid://bo13nehj0co3g" path="res://kenney_pico-8-platformer/Transparent/Tilemap/tilemap_packed.png" id="1_v0iea"]
+[ext_resource type="AudioStream" uid="uid://cfc43v3ffcg0b" path="res://kenney_new-platformer-pack-1.0/Sounds/sfx_hurt.ogg" id="2_cvnsp"]
+
+[sub_resource type="GDScript" id="GDScript_v0iea"]
+script/source = "extends CharacterBody2D
+
+const RUN_SPEED := 150.0
+const JUMP_VELOCITY := -300.0
+var gravity := ProjectSettings.get(\"physics/2d/default_gravity\") as float
+
+enum State { IDLE, WALK, JUMP, DIE } 
+var current_state: State = State.IDLE
+@onready var animated_sprite_2d: AnimatedSprite2D = $Node2D/AnimatedSprite2D
+@onready var enemy_check: RayCast2D = $Node2D/EnemyCheck
+@onready var enemy_check_2: RayCast2D = $Node2D/EnemyCheck2
+@onready var die: AudioStreamPlayer = $Die
+
+
+
+func _ready() -> void:
+	add_to_group(\"player\")
+
+
+
+func _physics_process(delta: float) -> void:
+	apply_gravity(delta)
+	handle_input()
+	update_state()
+	apply_movement()
+	update_animation()
+	check_for_enemy_collision()
+
+
+func check_for_enemy_collision() -> void:
+	if enemy_check.is_colliding(): 
+		var collider = enemy_check.get_collider()
+		if collider.is_in_group(\"black\"):  
+			die.play()
+			current_state = State.DIE 
+			animated_sprite_2d.play(\"die\")  
+			queue_free() 
+			get_tree().change_scene_to_file(\"res://UI/game_over.tscn\")
+	if enemy_check_2.is_colliding(): 
+		var collider = enemy_check_2.get_collider()
+		if collider.is_in_group(\"black\"): 
+			die.play()
+			current_state = State.DIE 
+			animated_sprite_2d.play(\"die\")  
+			queue_free() 
+			get_tree().change_scene_to_file(\"res://UI/game_over.tscn\")  
+			return
+
+
+func apply_gravity(delta: float) -> void:
+	if not is_on_floor():
+		velocity.y += gravity * delta
+
+
+func handle_input() -> void:
+	var direction := Input.get_axis(\"move_left\", \"move_right\")
+	velocity.x = direction * RUN_SPEED
+
+	if is_on_floor() and Input.is_action_just_pressed(\"jump\"):
+		velocity.y = JUMP_VELOCITY
+
+
+func update_state() -> void:
+	if not is_on_floor():
+		current_state = State.JUMP
+	elif is_zero_approx(velocity.x):
+		current_state = State.IDLE
+	else:
+		current_state = State.WALK
+
+
+func apply_movement() -> void:
+	move_and_slide()
+
+
+func update_animation() -> void:
+	match current_state:
+		State.IDLE:
+			animated_sprite_2d.play(\"idle\")
+		State.WALK:
+			animated_sprite_2d.play(\"walk\")
+		State.JUMP:
+			animated_sprite_2d.play(\"jump\")
+		State.DIE:
+			animated_sprite_2d.play(\"die\")
+
+
+	if not is_zero_approx(velocity.x):
+		animated_sprite_2d.flip_h = velocity.x < 0
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x3wgy"]
+size = Vector2(0.0254777, 0.0245776)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v0iea"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(32, 48, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fkybt"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(40, 48, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x3wgy"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(48, 48, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cvnsp"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(0, 48, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6t5aa"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(16, 48, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vgqql"]
+atlas = ExtResource("1_v0iea")
+region = Rect2(8, 48, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_fkybt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v0iea")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fkybt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x3wgy")
+}],
+"loop": true,
+"name": &"die",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cvnsp")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6t5aa")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vgqql")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[node name="Player" type="CharacterBody2D"]
+collision_layer = 2
+collision_mask = 7
+script = SubResource("GDScript_v0iea")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(9.00002, -5)
+scale = Vector2(431.75, 406.875)
+shape = SubResource("RectangleShape2D_x3wgy")
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Node2D"]
+position = Vector2(9.00002, -6)
+scale = Vector2(1.625, 1.5625)
+sprite_frames = SubResource("SpriteFrames_fkybt")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="EnemyCheck" type="RayCast2D" parent="Node2D"]
+position = Vector2(11, -5)
+target_position = Vector2(4, 0)
+collision_mask = 4
+
+[node name="EnemyCheck2" type="RayCast2D" parent="Node2D"]
+position = Vector2(6, -5)
+target_position = Vector2(-4, 0)
+collision_mask = 4
+
+[node name="Die" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_cvnsp")

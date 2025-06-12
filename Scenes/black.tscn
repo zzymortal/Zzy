@@ -1,0 +1,120 @@
+[gd_scene load_steps=12 format=3 uid="uid://bymqvjp6lh6vj"]
+
+[ext_resource type="Script" uid="uid://c8p3yxnh63eui" path="res://Scripts/black.gd" id="2_er1dn"]
+[ext_resource type="Texture2D" uid="uid://bo13nehj0co3g" path="res://kenney_pico-8-platformer/Transparent/Tilemap/tilemap_packed.png" id="3_uvs5v"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mkxpc"]
+atlas = ExtResource("3_uvs5v")
+region = Rect2(56, 56, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_er1dn"]
+atlas = ExtResource("3_uvs5v")
+region = Rect2(64, 56, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uvs5v"]
+atlas = ExtResource("3_uvs5v")
+region = Rect2(40, 56, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0k5rb"]
+atlas = ExtResource("3_uvs5v")
+region = Rect2(48, 56, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_isfeb"]
+atlas = ExtResource("3_uvs5v")
+region = Rect2(32, 56, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o7upc"]
+atlas = ExtResource("3_uvs5v")
+region = Rect2(72, 56, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a6h4v"]
+atlas = ExtResource("3_uvs5v")
+region = Rect2(80, 56, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_o7upc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mkxpc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_er1dn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uvs5v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0k5rb")
+}],
+"loop": true,
+"name": &"die",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_isfeb")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o7upc")
+}],
+"loop": true,
+"name": &"run",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a6h4v")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lgsxx"]
+size = Vector2(10, 10)
+
+[node name="black" type="CharacterBody2D"]
+collision_layer = 4
+script = ExtResource("2_er1dn")
+
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="FloorCheck" type="RayCast2D" parent="Node2D"]
+position = Vector2(7, -2)
+target_position = Vector2(0, 3)
+
+[node name="WallCheck" type="RayCast2D" parent="Node2D"]
+position = Vector2(6, -5)
+scale = Vector2(0.8, 1)
+target_position = Vector2(-13, 0)
+
+[node name="WallCheck2" type="RayCast2D" parent="Node2D"]
+position = Vector2(11, -5)
+scale = Vector2(0.8, 1)
+target_position = Vector2(15, 0)
+
+[node name="PlayerCheck" type="RayCast2D" parent="Node2D"]
+position = Vector2(6, -4)
+scale = Vector2(2, 1)
+target_position = Vector2(-19, 0)
+collision_mask = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Node2D"]
+position = Vector2(9, -7)
+scale = Vector2(1.5, 1.4375)
+sprite_frames = SubResource("SpriteFrames_o7upc")
+animation = &"die"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(9, -7)
+shape = SubResource("RectangleShape2D_lgsxx")
+
+[node name="DieTimer" type="Timer" parent="."]
+
+[node name="DeathTimer" type="Timer" parent="."]
